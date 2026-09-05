@@ -1,0 +1,118 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    # The claim in the README is that this works on any OS and any supported
+    # Python. That claim is only worth making if something checks it, so this
+    # matrix is the check: three operating systems against the oldest and newest
+    # Python the project supports.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ['3.9', '3.11', '3.13']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Arithmetic, the gate, and the measurement traps
+        run: python tests/test_session_weight.py
+
+      - name: Syntax floor, entry points, hook output
+        run: python tests/test_compat.py
+
+      - name: Installer is safe to run twice and reverts cleanly
+        shell: bash
+        run: |
+          set -e
+          export CLAUDE_CONFIG_DIR="$RUNNER_TEMP/claude-ci"
+
+          # A config that already has a hook and a status line of its own. The
+          # installer must leave both alone.
+          mkdir -p "$CLAUDE_CONFIG_DIR"
+          cat > "$CLAUDE_CONFIG_DIR/settings.json" <<'JSON'
+          {
+            "model": "opus",
+            "env": {"KEEP_ME": "yes"},
+            "statusLine": {"type": "command", "command": "my-own-statusline"},
+            "hooks": {
+              "PreToolUse": [{"hooks": [{"type": "command", "command": "echo mine"}]}]
+            }
+          }
+          JSON
+
+          echo "--- dry run writes nothing ---"
+          python install.py --dry-run
+          python - <<'PY'
+          import json, os
+          p = os.path.join(os.environ["CLAUDE_CONFIG_DIR"], "settings.json")
+          d = json.load(open(p, encoding="utf-8"))
+          assert "hooks" in d and list(d["hooks"]) == ["PreToolUse"], "dry run mutated hooks"
+          assert not os.path.isdir(os.path.join(os.environ["CLAUDE_CONFIG_DIR"], "skills")), \
+              "dry run copied files"
+          print("ok: dry run left everything alone")
+          PY
+
+          echo "--- install ---"
+          python install.py
+          python - <<'PY'
+          import json, os
+          root = os.environ["CLAUDE_CONFIG_DIR"]
+          d = json.load(open(os.path.join(root, "settings.json"), encoding="utf-8"))
+          for e in ("UserPromptSubmit", "SessionStart", "PreCompact", "PostCompact"):
+              assert e in d["hooks"], "missing hook event %s" % e
+          assert d["hooks"]["PreToolUse"], "clobbered a pre-existing hook"
+          assert d["statusLine"]["command"] == "my-own-statusline", "clobbered a status line"
+          assert d["model"] == "opus" and d["env"]["KEEP_ME"] == "yes", "lost unrelated settings"
+          assert "autoCompactEnabled" not in d, "changed compaction without being asked"
+          assert d.get("env", {}).get("DISABLE_COMPACT") is None, "disabled compaction unasked"
+          for rel in ("skills/long-session-handoff/SKILL.md",
+                      "skills/long-session-handoff/scripts/session_weight.py",
+                      "hooks/session-weight-watch.py",
+                      "hooks/statusline-weight.py"):
+              assert os.path.exists(os.path.join(root, rel)), "not installed: %s" % rel
+          print("ok: installed, nothing else touched")
+          PY
+
+          echo "--- installing twice is a no-op ---"
+          python install.py | grep -q "already registered" || \
+            { echo "second install did not detect itself"; exit 1; }
+
+          echo "--- the wall is explainable ---"
+          python "$CLAUDE_CONFIG_DIR/skills/long-session-handoff/scripts/session_weight.py" --explain
+
+          echo "--- uninstall reverts to what was there ---"
+          python install.py --uninstall
+          python - <<'PY'
+          import json, os
+          root = os.environ["CLAUDE_CONFIG_DIR"]
+          d = json.load(open(os.path.join(root, "settings.json"), encoding="utf-8"))
+          assert list(d.get("hooks", {})) == ["PreToolUse"], "left hooks behind: %s" % list(d.get("hooks", {}))
+          assert d["statusLine"]["command"] == "my-own-statusline", "removed someone else's status line"
+          assert d["model"] == "opus" and d["env"]["KEEP_ME"] == "yes", "lost unrelated settings"
+          assert not os.path.exists(os.path.join(root, "hooks/session-weight-watch.py")), "hook left behind"
+          assert not os.path.isdir(os.path.join(root, "skills/long-session-handoff")), "skill left behind"
+          print("ok: uninstalled cleanly")
+          PY
+
+      - name: Refuses to disable compaction without a window
+        shell: bash
+        run: |
+          export CLAUDE_CONFIG_DIR="$RUNNER_TEMP/claude-ci-2"
+          if python install.py --disable-compact --dry-run | grep -q "needs --window"; then
+            echo "ok: refused"
+          else
+            echo "FAIL: should have refused --disable-compact with no --window"
+            exit 1
+          fi
