@@ -86,8 +86,13 @@ jobs:
           PY
 
           echo "--- installing twice is a no-op ---"
-          python install.py | grep -q "already registered" || \
-            { echo "second install did not detect itself"; exit 1; }
+          # Same capture-then-match shape as the refusal step: keep the pipeline
+          # out of it so the assertion reports the failure, not pipefail.
+          second=$(python install.py 2>&1)
+          echo "$second"
+          printf '%s' "$second" | grep -q "already registered" || {
+            echo "FAIL: second install did not detect itself"; exit 1; }
+          echo "ok: second install was a no-op"
 
           echo "--- the wall is explainable ---"
           python "$CLAUDE_CONFIG_DIR/skills/long-session-handoff/scripts/session_weight.py" --explain
@@ -110,9 +115,33 @@ jobs:
         shell: bash
         run: |
           export CLAUDE_CONFIG_DIR="$RUNNER_TEMP/claude-ci-2"
-          if python install.py --disable-compact --dry-run | grep -q "needs --window"; then
-            echo "ok: refused"
-          else
-            echo "FAIL: should have refused --disable-compact with no --window"
+
+          # Capture first, match second. GitHub runs bash with -eo pipefail, and
+          # this command is SUPPOSED to exit non-zero -- refusing is the
+          # behaviour under test. Piping it straight into grep would let
+          # pipefail report the refusal's own exit code as a step failure even
+          # when the assertion passes.
+          set +e
+          out=$(python install.py --disable-compact --dry-run 2>&1)
+          rc=$?
+          set -e
+          echo "$out"
+          echo "exit code: $rc"
+
+          if [ "$rc" -eq 0 ]; then
+            echo "FAIL: should have refused, but exited 0"
             exit 1
           fi
+          if printf '%s' "$out" | grep -q "needs --window"; then
+            echo "ok: refused, and said why"
+          else
+            echo "FAIL: refused without explaining that --window is required"
+            exit 1
+          fi
+
+          # And nothing may have been written on the way to refusing.
+          if [ -e "$CLAUDE_CONFIG_DIR/settings.json" ]; then
+            echo "FAIL: wrote settings.json while refusing"
+            exit 1
+          fi
+          echo "ok: wrote nothing"
