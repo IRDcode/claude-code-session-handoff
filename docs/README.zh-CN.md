@@ -1,5 +1,14 @@
 # claude-code-session-handoff
 
+<p align="right">
+  <a href="../README.md">English</a> ·
+  <a href="README.ja.md">日本語</a> ·
+  <a href="README.ko.md">한국어</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.fa.md">فارسی</a>
+</p>
+
 Claude Code 会自动压缩长会话：它删掉你对话的大部分内容，用一段摘要取而代之，然后继续。
 你通常是这样发现的——模型开始重新询问两小时前就已经定下来的事情。
 
@@ -9,9 +18,6 @@ Claude Code 会自动压缩长会话：它删掉你对话的大部分内容，�
 
 它还诊断出一个值得了解的配置陷阱——即使你根本不打算安装本工具，也建议看一眼
 [被钳制的窗口](#被钳制的窗口)。
-
-其他语言：[English](../README.md) · [日本語](README.ja.md) · [한국어](README.ko.md) ·
-[Español](README.es.md) · [Français](README.fr.md) · [فارسی](README.fa.md)
 
 ---
 
@@ -242,6 +248,24 @@ session_weight.py --session-id <uuid> --json
 欢迎报告问题，尤其是"在我的环境里数字不对"——请附上 `--explain` 的输出。
 如果某个 Claude Code 版本改动了这套算术，这类报告修得最快。
 
-## 许可
+提交 PR 前请先跑两个套件：
 
-MIT——见 [LICENSE](../LICENSE)。
+```bash
+python tests/test_session_weight.py
+python tests/test_compat.py
+```
+
+## 安全
+
+[SECURITY.md](../SECURITY.md) 明确写出本工具读什么、写什么、以及往网络上发什么（什么都不发）。
+在安装任何会碰你会话文件的东西之前，值得看一眼。
+
+## 许可与署名
+
+MIT——见 [LICENSE](../LICENSE)。可自由使用、修改、再分发，包括商用。
+唯一的条件是版权声明与许可文本必须随之保留，因此分叉或重新打包的副本仍会写明来源。
+
+如果你用到了这套思路或这些发现——尤其是"窗口被钳制"的诊断——欢迎给个反向链接。
+仓库里的 `CITATION.cff` 让 GitHub 的"Cite this repository"按钮能给出正确的引用信息。
+
+作者：[IRDkiya](https://github.com/IRDcode)。

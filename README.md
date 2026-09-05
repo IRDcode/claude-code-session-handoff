@@ -1,5 +1,14 @@
 # claude-code-session-handoff
 
+<p align="right">
+  <a href="docs/README.zh-CN.md">简体中文</a> ·
+  <a href="docs/README.ja.md">日本語</a> ·
+  <a href="docs/README.ko.md">한국어</a> ·
+  <a href="docs/README.es.md">Español</a> ·
+  <a href="docs/README.fr.md">Français</a> ·
+  <a href="docs/README.fa.md">فارسی</a>
+</p>
+
 Claude Code compacts a long session automatically: it deletes most of your
 conversation, replaces it with a summary, and carries on. You usually notice
 because the model starts re-asking things you settled two hours ago.
@@ -12,10 +21,6 @@ visible and resumable.
 
 It also diagnoses a configuration trap worth knowing about even if you never
 install any of this — see [The clamp](#the-clamp).
-
-Translations: [简体中文](docs/README.zh-CN.md) · [日本語](docs/README.ja.md) ·
-[한국어](docs/README.ko.md) · [Español](docs/README.es.md) ·
-[Français](docs/README.fr.md) · [فارسی](docs/README.fa.md)
 
 ---
 
@@ -284,6 +289,27 @@ Bug reports welcome, especially "the numbers were wrong on my setup" — include
 the output of `--explain`. If a Claude Code release moves the arithmetic, that is
 the report that fixes it fastest.
 
-## License
+Before opening a PR, run both suites:
 
-MIT — see [LICENSE](LICENSE).
+```bash
+python tests/test_session_weight.py
+python tests/test_compat.py
+```
+
+## Security
+
+`SECURITY.md` documents exactly what this reads, what it writes, and what it
+sends over the network (nothing). Worth a look before installing anything that
+touches your session files.
+
+## License and credit
+
+MIT — see [LICENSE](LICENSE). Free to use, modify, and redistribute, including
+commercially. The one condition is that the copyright notice and licence text
+travel with it, so a fork or a repackaged copy still says where it came from.
+
+If you use the approach or the findings — particularly the clamped-window
+diagnosis — a link back is appreciated. `CITATION.cff` is there so GitHub's
+"Cite this repository" button produces something correct.
+
+Authored by [IRDkiya](https://github.com/IRDcode).

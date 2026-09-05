@@ -1,5 +1,14 @@
 # claude-code-session-handoff
 
+<p align="right">
+  <a href="../README.md">English</a> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="README.ja.md">日本語</a> ·
+  <a href="README.ko.md">한국어</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.fa.md">فارسی</a>
+</p>
+
 Claude Code compacte automatiquement les sessions longues : il supprime la majeure
 partie de votre conversation, la remplace par un résumé et poursuit. On s'en
 aperçoit généralement parce que le modèle recommence à demander des choses réglées
@@ -13,10 +22,6 @@ et la chaîne des sessions reste visible et reprenable.
 
 Il diagnostique aussi un piège de configuration qui mérite d'être connu même si
 vous n'installez rien de tout ceci : voir [Le plafonnement](#le-plafonnement).
-
-Autres langues : [English](../README.md) · [简体中文](README.zh-CN.md) ·
-[日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) ·
-[فارسی](README.fa.md)
 
 ---
 
@@ -293,6 +298,28 @@ Les rapports de bug sont bienvenus, en particulier « les chiffres étaient faux
 moi » : joignez la sortie de `--explain`. Si une version de Claude Code déplace
 cette arithmétique, c'est le rapport qui la corrige le plus vite.
 
-## Licence
+Avant d'ouvrir une PR, lancez les deux suites :
 
-MIT — voir [LICENSE](../LICENSE).
+```bash
+python tests/test_session_weight.py
+python tests/test_compat.py
+```
+
+## Sécurité
+
+[SECURITY.md](../SECURITY.md) documente précisément ce qui est lu, ce qui est écrit
+et ce qui part sur le réseau (rien). Cela vaut une lecture avant d'installer
+quelque chose qui touche à vos fichiers de session.
+
+## Licence et crédit
+
+MIT — voir [LICENSE](../LICENSE). Libre d'usage, de modification et de
+redistribution, y compris commerciale. La seule condition est que l'avis de
+copyright et le texte de la licence voyagent avec le code, de sorte qu'un fork ou
+une copie reconditionnée indique toujours son origine.
+
+Si vous utilisez l'approche ou les constats — en particulier le diagnostic de la
+fenêtre plafonnée — un lien retour est apprécié. `CITATION.cff` est là pour que le
+bouton « Cite this repository » de GitHub produise quelque chose de correct.
+
+Écrit par [IRDkiya](https://github.com/IRDcode).

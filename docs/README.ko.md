@@ -1,5 +1,14 @@
 # claude-code-session-handoff
 
+<p align="right">
+  <a href="../README.md">English</a> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="README.ja.md">日本語</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.fa.md">فارسی</a>
+</p>
+
 Claude Code는 긴 세션을 자동으로 압축합니다. 대화의 대부분을 지우고 요약으로 대체한 뒤
 그대로 진행합니다. 보통은 두 시간 전에 정리한 내용을 모델이 다시 묻기 시작할 때
 알아차리게 됩니다.
@@ -11,9 +20,6 @@ Claude Code는 긴 세션을 자동으로 압축합니다. 대화의 대부분�
 
 이 도구를 전혀 설치하지 않더라도 알아둘 만한 설정 함정도 함께 진단합니다.
 [잘려나가는 창](#잘려나가는-창)을 보세요.
-
-다른 언어: [English](../README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) ·
-[Español](README.es.md) · [Français](README.fr.md) · [فارسی](README.fa.md)
 
 ---
 
@@ -266,6 +272,27 @@ session_weight.py --session-id <uuid> --json
 첨부해 주세요. Claude Code 업데이트로 이 산술이 바뀌었다면, 그 리포트가 가장 빠르게
 고칠 수 있게 해줍니다.
 
-## 라이선스
+PR을 열기 전에 두 스위트를 실행해 주세요:
 
-MIT — [LICENSE](../LICENSE) 참고.
+```bash
+python tests/test_session_weight.py
+python tests/test_compat.py
+```
+
+## 보안
+
+[SECURITY.md](../SECURITY.md)에 무엇을 읽고, 무엇을 쓰고, 네트워크로 무엇을 보내는지
+(아무것도 보내지 않습니다) 명시해 두었습니다. 세션 파일을 건드리는 것을 설치하기 전에
+한 번 보시길 권합니다.
+
+## 라이선스와 크레딧
+
+MIT — [LICENSE](../LICENSE) 참고. 상업적 이용을 포함해 자유롭게 사용·수정·재배포할 수
+있습니다. 유일한 조건은 저작권 표시와 라이선스 본문을 함께 유지하는 것이며, 그래서 포크나
+재패키징된 사본에도 출처가 남습니다.
+
+이 접근이나 발견 — 특히 창이 잘려나가는 진단 — 을 사용했다면 링크를 남겨주시면
+감사하겠습니다. `CITATION.cff`가 있어 GitHub의 "Cite this repository" 버튼이 올바른
+인용 정보를 만들어 줍니다.
+
+작성자: [IRDkiya](https://github.com/IRDcode)

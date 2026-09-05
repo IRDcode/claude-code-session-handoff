@@ -1,5 +1,14 @@
 # claude-code-session-handoff
 
+<p align="right">
+  <a href="../README.md">English</a> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="README.ja.md">日本語</a> ·
+  <a href="README.ko.md">한국어</a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.fa.md">فارسی</a>
+</p>
+
 Claude Code comprime automáticamente las sesiones largas: borra la mayor parte de
 tu conversación, la sustituye por un resumen y sigue adelante. Normalmente te das
 cuenta porque el modelo empieza a preguntar de nuevo cosas que quedaron zanjadas
@@ -13,10 +22,6 @@ visible y recuperable.
 
 También diagnostica una trampa de configuración que vale la pena conocer aunque
 no instales nada de esto: consulta [El recorte](#el-recorte).
-
-Otros idiomas: [English](../README.md) · [简体中文](README.zh-CN.md) ·
-[日本語](README.ja.md) · [한국어](README.ko.md) · [Français](README.fr.md) ·
-[فارسی](README.fa.md)
 
 ---
 
@@ -289,6 +294,28 @@ Los informes de fallos son bienvenidos, especialmente «los números no cuadraba
 mi entorno»: incluye la salida de `--explain`. Si una versión de Claude Code mueve
 esta aritmética, ese es el informe que lo arregla más rápido.
 
-## Licencia
+Antes de abrir un PR, ejecuta las dos suites:
 
-MIT — ver [LICENSE](../LICENSE).
+```bash
+python tests/test_session_weight.py
+python tests/test_compat.py
+```
+
+## Seguridad
+
+[SECURITY.md](../SECURITY.md) documenta exactamente qué lee, qué escribe y qué
+envía por la red (nada). Merece un repaso antes de instalar algo que toca tus
+archivos de sesión.
+
+## Licencia y crédito
+
+MIT — ver [LICENSE](../LICENSE). Libre para usar, modificar y redistribuir,
+incluso comercialmente. La única condición es que el aviso de copyright y el texto
+de la licencia viajen con el código, de modo que un fork o una copia reempaquetada
+siga indicando de dónde salió.
+
+Si usas el enfoque o los hallazgos —en particular el diagnóstico de la ventana
+recortada— se agradece un enlace de vuelta. `CITATION.cff` está ahí para que el
+botón «Cite this repository» de GitHub produzca algo correcto.
+
+Escrito por [IRDkiya](https://github.com/IRDcode).

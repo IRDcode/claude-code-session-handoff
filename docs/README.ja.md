@@ -1,5 +1,14 @@
 # claude-code-session-handoff
 
+<p align="right">
+  <a href="../README.md">English</a> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="README.ko.md">한국어</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.fa.md">فارسی</a>
+</p>
+
 Claude Code は長いセッションを自動的に圧縮します。会話の大部分を削除し、要約に置き換えて、
 そのまま続行します。気づくきっかけはたいてい、2時間前に決めたことをモデルが訊き直してくる
 瞬間です。
@@ -11,9 +20,6 @@ Claude Code は長いセッションを自動的に圧縮します。会話の�
 
 本ツールを一切インストールしない場合でも、知っておく価値のある設定の罠も突き止めています。
 [クランプされる窓](#クランプされる窓)を参照してください。
-
-他の言語：[English](../README.md) · [简体中文](README.zh-CN.md) · [한국어](README.ko.md) ·
-[Español](README.es.md) · [Français](README.fr.md) · [فارسی](README.fa.md)
 
 ---
 
@@ -263,6 +269,26 @@ session_weight.py --session-id <uuid> --json
 不具合報告を歓迎します。とくに「自分の環境では数字が違う」——`--explain` の出力を添えて
 ください。Claude Code の更新でこの算術が変わった場合、その報告がいちばん早く直せます。
 
-## ライセンス
+PR を出す前に両方のスイートを実行してください：
 
-MIT —— [LICENSE](../LICENSE) を参照。
+```bash
+python tests/test_session_weight.py
+python tests/test_compat.py
+```
+
+## セキュリティ
+
+[SECURITY.md](../SECURITY.md) に、何を読み、何を書き、ネットワークへ何を送るのか（何も
+送りません）を明記しています。セッションのファイルに触れるものを入れる前に一読を。
+
+## ライセンスとクレジット
+
+MIT —— [LICENSE](../LICENSE) を参照。商用を含め、自由に使用・改変・再配布できます。
+唯一の条件は著作権表示とライセンス本文を一緒に保つことで、フォークや再パッケージされた
+コピーでも出所が分かるようになっています。
+
+このアプローチや調査結果——とくに窓がクランプされる件の診断——を利用した場合は、リンクを
+いただけると嬉しいです。`CITATION.cff` を置いてあるので、GitHub の
+「Cite this repository」ボタンが正しい引用情報を返します。
+
+作者：[IRDkiya](https://github.com/IRDcode)
