@@ -1,5 +1,9 @@
 # claude-code-session-handoff
 
+[![tests](https://github.com/IRDcode/claude-code-session-handoff/actions/workflows/tests.yml/badge.svg)](https://github.com/IRDcode/claude-code-session-handoff/actions/workflows/tests.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![python: 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
+
 <p align="right">
   <a href="docs/README.zh-CN.md">简体中文</a> ·
   <a href="docs/README.ja.md">日本語</a> ·
