@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: claude-code-session-handoff
+message: >-
+  If you use this software or its findings in your own work, please cite it
+  using the metadata below.
+type: software
+authors:
+  - alias: IRDkiya
+    given-names: Kiya
+repository-code: "https://github.com/IRDcode/claude-code-session-handoff"
+abstract: >-
+  Detects when a Claude Code session is genuinely close to the limit that ends
+  it, then exports the whole session to disk and continues in a fresh session
+  that reads the parent transcript in full — instead of letting auto-compaction
+  delete most of the conversation and replace it with a summary.
+
+  Includes a diagnosis of a configuration trap in which the autoCompactWindow
+  setting is silently floored to the model ceiling, so a session configured for
+  a large context window is compacted far earlier than expected with most of the
+  paid-for window left unused.
+keywords:
+  - claude-code
+  - context-management
+  - session-management
+  - llm-tooling
+  - developer-tools
+license: MIT
