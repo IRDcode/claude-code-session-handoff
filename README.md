@@ -287,6 +287,19 @@ it has not measured:
 - Prompt caching: a handoff starts a new session, so its cache starts cold. For
   a session near the wall that is a good trade; it is still a cost.
 
+## Also for Hermes Agent
+
+The same idea, ported to [Hermes Agent](https://github.com/NousResearch/hermes-agent),
+lives at [**hermes-agent-session-handoff**](https://github.com/IRDcode/hermes-agent-session-handoff).
+
+**If you use Hermes, that version is the better one.** Hermes archives compacted
+turns instead of discarding them, so the port can recover context that was already
+summarised away, read the provider's own token counts straight out of the session
+store, and fire from a real plugin hook rather than a shell hook. It also carries
+three measured corrections to the detector in this repo — archived rows counted as
+live context, elapsed time scored as working time, and compaction markers counted
+by substring search — with the numbers that proved each one.
+
 ## Contributing
 
 Bug reports welcome, especially "the numbers were wrong on my setup" — include
